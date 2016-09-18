@@ -132,3 +132,4 @@ gen-external-apklibs
 .DS_Store
 /build
 /captures
+.idea/
