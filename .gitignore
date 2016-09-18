@@ -133,3 +133,5 @@ gen-external-apklibs
 /build
 /captures
 .idea/
+
+MyConfig.java

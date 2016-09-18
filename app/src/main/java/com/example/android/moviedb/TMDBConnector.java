@@ -149,7 +149,7 @@ public class TMDBConnector extends AsyncTask<String,Void,ArrayList<MovieItem>> {
 
     public ArrayList<MovieItem> getMoviesList(String ACTION){
         final String BASEURL = "https://api.themoviedb.org/3/";
-        final String API_KEY = BuildConfig.MOVIEDB_API_KEY;
+        final String API_KEY = MyConfig.MOVIEDB_API_KEY;
         final String API_PARAM = "api_key";
         Uri uri =  Uri.parse(BASEURL+ACTION).buildUpon()
                 .appendQueryParameter(API_PARAM,API_KEY)
