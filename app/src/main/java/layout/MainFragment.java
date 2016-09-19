@@ -62,6 +62,10 @@ public class MainFragment extends Fragment {
         connector.execute("movie/popular");
     }
 
+    public void getFavoriteMovies(){
+
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -88,7 +92,7 @@ public class MainFragment extends Fragment {
 //                        .putExtra(Intent.EXTRA_TEXT,forecast);
 //                startActivity(intent);
                 MovieItem item = (MovieItem) mMoviesAdapter.getItem(position);
-                Toast.makeText(getActivity(),item.getName(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(),item.getId()+"",Toast.LENGTH_SHORT).show();
 
                 ((TwoPaneInterface) getActivity()).listItemClickCallback(item);
 

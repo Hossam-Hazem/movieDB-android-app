@@ -11,6 +11,7 @@ import java.io.Serializable;
  */
 
 public class MovieItem implements Serializable {
+    private long id;
     private String name;
     private String date;
     private float rating;
@@ -18,7 +19,8 @@ public class MovieItem implements Serializable {
     private String imagePath;
     private String baseURI;
 
-    public MovieItem(String name, String date, float rating, String description, String imagePath) {
+    public MovieItem(long id, String name, String date, float rating, String description, String imagePath) {
+        this.id = id;
         this.name = name;
         this.date = date;
         this.rating = rating;
@@ -27,8 +29,9 @@ public class MovieItem implements Serializable {
         this.baseURI = "https://image.tmdb.org/t/p/w300";
     }
 
-
-
+    public long getId() {
+        return id;
+    }
     public String getName() {
         return name;
     }
@@ -58,7 +61,7 @@ public class MovieItem implements Serializable {
     }
 
     public boolean isFavorite(Context context){
-        return MovieContract.FavoriteEntry.checkMovieExistsByName(context,name);
+        return MovieContract.FavoriteEntry.checkMovieExistsByName(context,id);
     }
 
     public boolean setFavorite(Context context){
@@ -70,7 +73,7 @@ public class MovieItem implements Serializable {
     public boolean removeFavorite(Context context){
         return MovieContract.FavoriteEntry.delete(
                 context,
-                this.name
+                this.id
         );
     }
 }

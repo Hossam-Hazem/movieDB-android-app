@@ -44,6 +44,8 @@ public class MovieContract {
         // Table name
         public static final String TABLE_NAME = "favorite";
 
+        public static final String COLUMN_FAVORITE_ID = "movie_id";
+
         public static final String COLUMN_FAVORITE_TITLE = "title";
 
         public static final String COLUMN_FAVORITE_SYNOPSIS = "synopsis";
@@ -62,6 +64,7 @@ public class MovieContract {
         public static boolean insert(Context context, MovieItem movieItem){
 
             ContentValues movieValues = new ContentValues();
+            movieValues.put(COLUMN_FAVORITE_ID,movieItem.getId());
             movieValues.put(COLUMN_FAVORITE_TITLE,movieItem.getName());
             movieValues.put(COLUMN_FAVORITE_SYNOPSIS,movieItem.getDescription());
             movieValues.put(COLUMN_FAVORITE_RATING,movieItem.getRating()+"");
@@ -78,13 +81,13 @@ public class MovieContract {
             return false;
         }
 
-        public static boolean checkMovieExistsByName(Context context,String name){
-            Uri uri= CONTENT_URI.buildUpon().appendPath(name).build();
+        public static boolean checkMovieExistsByName(Context context,long id){
+            Uri uri= CONTENT_URI.buildUpon().appendPath(id+"").build();
             Cursor result = context.getContentResolver().query(
                     uri,
                     new String[]{_ID},
-                    COLUMN_FAVORITE_TITLE + " = ?",
-                    new String[]{name},
+                    COLUMN_FAVORITE_ID + " = ?",
+                    new String[]{id+""},
                     null
             );
             if (result != null && result.moveToFirst()) {
@@ -94,11 +97,11 @@ public class MovieContract {
             return false;
         }
 
-        public static boolean delete(Context context, String name) {
+        public static boolean delete(Context context, long id) {
             int res =  context.getContentResolver().delete(
                     CONTENT_URI,
-                    FavoriteEntry.COLUMN_FAVORITE_TITLE+"=?",
-                    new String[]{name});
+                    FavoriteEntry.COLUMN_FAVORITE_ID+"=?",
+                    new String[]{id+""});
             return res>0;
         }
     }

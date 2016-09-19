@@ -62,7 +62,9 @@ public class TMDBConnector extends AsyncTask<String,Void,ArrayList<MovieItem>> {
             JSONObject movieJSON;
             for(int c = 0;c<total;c++){
                 movieJSON = moviesJSON.getJSONObject(c);
-                MovieItem movie = new MovieItem(movieJSON.getString("title"),
+                MovieItem movie = new MovieItem(
+                        movieJSON.getLong("id"),
+                        movieJSON.getString("title"),
                         movieJSON.getString("release_date"),
                         (float)movieJSON.getDouble("vote_average"),
                         movieJSON.getString("overview"),

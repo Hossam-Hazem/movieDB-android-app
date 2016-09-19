@@ -10,7 +10,7 @@ import com.example.android.moviedb.data.MovieContract.FavoriteEntry;
  */
 public class MovieDbHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     public static final String DATABASE_NAME = "movie.db";
 
@@ -25,6 +25,7 @@ public class MovieDbHelper extends SQLiteOpenHelper {
         // location setting, the city name, and the latitude and longitude
         final String SQL_CREATE_MOVIE_TABLE = "CREATE TABLE " + FavoriteEntry.TABLE_NAME + " (" +
                 FavoriteEntry._ID + " INTEGER PRIMARY KEY," +
+                FavoriteEntry.COLUMN_FAVORITE_ID+" INTEGER UNIQUE NOT NULL, " +
                 FavoriteEntry.COLUMN_FAVORITE_TITLE + " TEXT UNIQUE NOT NULL, " +
                 FavoriteEntry.COLUMN_FAVORITE_SYNOPSIS + " TEXT NOT NULL, " +
                 FavoriteEntry.COLUMN_FAVORITE_RATING + " REAL NOT NULL, " +

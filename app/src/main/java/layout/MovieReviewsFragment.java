@@ -1,10 +1,13 @@
 package layout;
 
+import android.app.Dialog;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -36,14 +39,18 @@ public class MovieReviewsFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
 
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View fragment = inflater.inflate(R.layout.fragment_movie_reviews, container, false);
+
+        getDialog().setTitle("Reviews");
 
         mReviewsAdapter =
                 new ArrayAdapter<String>(

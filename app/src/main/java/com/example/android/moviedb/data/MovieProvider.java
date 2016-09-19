@@ -125,7 +125,7 @@ public class MovieProvider extends ContentProvider {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         final String authority = MovieContract.CONTENT_AUTHORITY;
         matcher.addURI(authority,MovieContract.PATH_FAVORITE, FAVORITE);
-        matcher.addURI(authority,MovieContract.PATH_FAVORITE+"/*",FAVORITE_ITEM);
+        matcher.addURI(authority,MovieContract.PATH_FAVORITE+"/#",FAVORITE_ITEM);
         return matcher;
     }
 }
