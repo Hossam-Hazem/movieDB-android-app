@@ -9,7 +9,7 @@
 
     <style name="CustomDialog" parent="Theme.AppCompat.Dialog">
         <item name="android:background">#ff424242</item>
-        <item name="windowNoTitle">false</item>
+        <item name="android:windowNoTitle">false</item>
     </style>
 
 </resources>

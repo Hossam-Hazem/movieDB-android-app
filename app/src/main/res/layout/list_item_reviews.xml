@@ -17,21 +17,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="&#8220;"/>
+            android:text="@string/opening_quote"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minHeight="?android:attr/listPreferredItemHeight"
             android:gravity="center"
-            android:id="@+id/fragment_movie_review_item_textView"
-            android:text="asdasdasdasd" />
+            android:id="@+id/list_item_reviews_content" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="&#8221;"/>
+            android:text="@string/closing_quote"/>
 
     </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Small Text"
+        android:id="@+id/list_item_reviews_author"
+        android:layout_gravity="right"
+        android:textStyle="bold|italic" />
+
 </LinearLayout>

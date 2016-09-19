@@ -17,8 +17,8 @@ import layout.MovieTrailersFragment;
 public abstract class MovieParentActivity extends AppCompatActivity {
 
 
-    public void openReviewsFragment(){
-        showDialog(MovieReviewsFragment.newInstance());
+    public void openReviewsFragment(Bundle bundle){
+        showDialog(MovieReviewsFragment.newInstance(),bundle);
     }
 
     public void openTrailersFragment(Bundle bundle){

@@ -24,8 +24,11 @@ import com.example.android.moviedb.MovieContentConnector;
 import com.example.android.moviedb.MovieItem;
 import com.example.android.moviedb.MovieParentActivity;
 import com.example.android.moviedb.R;
+import com.example.android.moviedb.Review;
 import com.example.android.moviedb.Trailer;
 import com.squareup.picasso.Picasso;
+
+import org.w3c.dom.Text;
 
 import java.io.Serializable;
 import java.lang.reflect.Array;
@@ -43,6 +46,7 @@ public class MovieDetailFragment extends Fragment implements View.OnClickListene
     boolean isFavorite;
     boolean twoPane;
     TrailersAdapter trailersAdapter;
+    ReviewsAdapter reviewsAdapter;
 
 
     public MovieDetailFragment() {
@@ -59,6 +63,7 @@ public class MovieDetailFragment extends Fragment implements View.OnClickListene
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         trailersAdapter = new TrailersAdapter(getActivity());
+        reviewsAdapter = new ReviewsAdapter(getActivity());
 
     }
 
@@ -78,7 +83,7 @@ public class MovieDetailFragment extends Fragment implements View.OnClickListene
         movieDetails = (MovieItem) getArguments().getSerializable("movieDetails");
         isFavorite = movieDetails.isFavorite(getContext());
 
-        MovieContentConnector connector = new MovieContentConnector(trailersAdapter);
+        MovieContentConnector connector = new MovieContentConnector(trailersAdapter,reviewsAdapter);
         connector.execute(movieDetails.getId()+"");
 
 //        setToolbar();
@@ -109,7 +114,9 @@ public class MovieDetailFragment extends Fragment implements View.OnClickListene
                 break;
             }
             case R.id.movie_reviews_button:{
-                ((MovieParentActivity)getActivity()).openReviewsFragment();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("reviews",reviewsAdapter);
+                ((MovieParentActivity)getActivity()).openReviewsFragment(bundle);
                 break;
             }
             case R.id.movie_trailers_button:{
@@ -297,6 +304,64 @@ public class MovieDetailFragment extends Fragment implements View.OnClickListene
             textView = (TextView) view.findViewById(R.id.list_item_trailers_textView);
             Trailer trailer = trailers.get(position);
             textView.setText(trailer.getName());
+            return view;
+        }
+    }
+
+
+    public class ReviewsAdapter extends BaseAdapter implements Serializable {
+
+        ArrayList<Review> reviews;
+        Context mContext;
+
+        public ReviewsAdapter(Context c){
+            reviews = new ArrayList<>();
+            mContext = c;
+        }
+
+        @Override
+        public int getCount() {
+            return reviews.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return reviews.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        public void add(Review item){
+            reviews.add(item);
+            super.notifyDataSetChanged();
+        }
+
+        public void clear(){
+            reviews.clear();
+            super.notifyDataSetChanged();
+        }
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            TextView authorTextView;
+            TextView contentTextView;
+            View view;
+            LayoutInflater inflater = LayoutInflater.from(mContext);
+            if(convertView == null){
+                view = inflater.inflate(R.layout.list_item_reviews,parent,false);
+
+            }
+            else{
+                view = convertView;
+            }
+            authorTextView = (TextView) view.findViewById(R.id.list_item_reviews_author);
+            contentTextView = (TextView) view.findViewById(R.id.list_item_reviews_content);
+            Review review = reviews.get(position);
+            contentTextView.setText(review.getContent());
+            authorTextView.setText(review.getAuthor());
+
             return view;
         }
     }

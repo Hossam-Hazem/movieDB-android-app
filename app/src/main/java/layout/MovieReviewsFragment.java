@@ -1,15 +1,17 @@
 package layout;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import com.example.android.moviedb.R;
 
@@ -18,7 +20,7 @@ import java.util.ArrayList;
 
 public class MovieReviewsFragment extends DialogFragment {
 
-    private ArrayAdapter<String> mReviewsAdapter;
+    private MovieDetailFragment.ReviewsAdapter mReviewsAdapter;
 
     public MovieReviewsFragment() {
         // Required empty public constructor
@@ -41,49 +43,25 @@ public class MovieReviewsFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
         this.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
 
+
     }
 
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return super.onCreateDialog(savedInstanceState);
+        mReviewsAdapter = (MovieDetailFragment.ReviewsAdapter) getArguments().getSerializable("reviews");
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.CustomDialog));
+        builder
+                .setTitle("Reviews")
+                .setPositiveButton("Exit", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                })
+                .setAdapter(mReviewsAdapter,null);
+        return builder.create();
     }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View fragment = inflater.inflate(R.layout.fragment_movie_reviews, container, false);
-
-        getDialog().setTitle("Reviews");
-
-        mReviewsAdapter =
-                new ArrayAdapter<String>(
-                        getActivity(), // The current context (this activity)
-                        R.layout.fragment_movie_review_item, // The name of the layout ID.
-                        R.id.fragment_movie_review_item_textView, // The ID of the textview to populate.
-                        new ArrayList<String>());
-
-        ListView listView = (ListView) fragment.findViewById(R.id.listview_reviews);
-        listView.setAdapter(mReviewsAdapter);
-        mReviewsAdapter.add("aaaaaaaaaaaaaaaaaaaaa");
-        mReviewsAdapter.add("bbbbbbbbbbbbbbbbbbbbb");
-        mReviewsAdapter.add("ccccccccccccccccccccc");
-        mReviewsAdapter.add("ddddddddddddddddddddd");
-        mReviewsAdapter.add("eeeeeeeeeeeeeeeeeeeee");
-        mReviewsAdapter.add("fffffffffffffffffffff");
-        mReviewsAdapter.add("ggggggggggggggggggggg");
-        mReviewsAdapter.add("ggggggggggggggggggggg");
-        mReviewsAdapter.add("ggggggggggggggggggggg");
-
-
-
-
-        return fragment;
-    }
-
-
 
 
 }

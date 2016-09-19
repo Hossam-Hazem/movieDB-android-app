@@ -23,8 +23,8 @@
 
 
 
-    <style name="CustomDialog" parent="Platform.AppCompat">
-        <item name="windowNoTitle">false</item>
-
+    <style name="CustomDialog" parent="Theme.AppCompat.Dialog">
+        <item name="android:background">#000</item>
+        <item name="android:windowNoTitle">false</item>
     </style>
 </resources>

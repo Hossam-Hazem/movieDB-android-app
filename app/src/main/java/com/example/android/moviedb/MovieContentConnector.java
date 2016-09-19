@@ -19,11 +19,13 @@ import layout.MovieTrailersFragment;
 public class MovieContentConnector extends AsyncTask<String,Void,MovieContentConnector.MovieContentPackage> {
     final String BASEURL = "https://api.themoviedb.org/3/";
     MovieDetailFragment.TrailersAdapter trailersAdapter;
+    MovieDetailFragment.ReviewsAdapter reviewsAdapter;
     final String API_KEY = MyConfig.MOVIEDB_API_KEY;
     final String API_PARAM = "api_key";
 
-    public MovieContentConnector(MovieDetailFragment.TrailersAdapter trailersAdapter) {
+    public MovieContentConnector(MovieDetailFragment.TrailersAdapter trailersAdapter, MovieDetailFragment.ReviewsAdapter reviewsAdapter) {
         this.trailersAdapter = trailersAdapter;
+        this.reviewsAdapter = reviewsAdapter;
     }
 
     public ArrayList<Trailer> getMovieTrailers(String id){
@@ -94,12 +96,20 @@ public class MovieContentConnector extends AsyncTask<String,Void,MovieContentCon
         super.onPostExecute(movieContentPackage);
 
         addTrailersToAdapter(movieContentPackage.trailers);
+        addReviewsToAdapter(movieContentPackage.reviews);
     }
 
     private void addTrailersToAdapter(ArrayList<Trailer> trailers){
         Iterator<Trailer> i = trailers.iterator();
         while(i.hasNext()){
             trailersAdapter.add(i.next());
+        }
+    }
+
+    public void addReviewsToAdapter(ArrayList<Review> reviews){
+        Iterator<Review> i = reviews.iterator();
+        while(i.hasNext()){
+            reviewsAdapter.add(i.next());
         }
     }
 
