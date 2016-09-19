@@ -1,5 +1,6 @@
 package layout;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Build;
@@ -13,15 +14,22 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.example.android.moviedb.MovieContentConnector;
 import com.example.android.moviedb.MovieItem;
 import com.example.android.moviedb.MovieParentActivity;
 import com.example.android.moviedb.R;
+import com.example.android.moviedb.Trailer;
 import com.squareup.picasso.Picasso;
+
+import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 import static com.example.android.moviedb.MovieDetailActivity.MOVIE_SERIALIZABLE_KEY;
 
@@ -34,6 +42,8 @@ public class MovieDetailFragment extends Fragment implements View.OnClickListene
     View fragmentView;
     boolean isFavorite;
     boolean twoPane;
+    TrailersAdapter trailersAdapter;
+
 
     public MovieDetailFragment() {
     }
@@ -42,14 +52,13 @@ public class MovieDetailFragment extends Fragment implements View.OnClickListene
     public void onStart() {
         super.onStart();
 
-
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
+        trailersAdapter = new TrailersAdapter(getActivity());
 
     }
 
@@ -69,7 +78,12 @@ public class MovieDetailFragment extends Fragment implements View.OnClickListene
         movieDetails = (MovieItem) getArguments().getSerializable("movieDetails");
         isFavorite = movieDetails.isFavorite(getContext());
 
+        MovieContentConnector connector = new MovieContentConnector(trailersAdapter);
+        connector.execute(movieDetails.getId()+"");
+
 //        setToolbar();
+
+
 
         linkMovieDetailsUI();
 
@@ -99,7 +113,9 @@ public class MovieDetailFragment extends Fragment implements View.OnClickListene
                 break;
             }
             case R.id.movie_trailers_button:{
-                ((MovieParentActivity)getActivity()).openTrailersFragment();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("trailers",trailersAdapter);
+                ((MovieParentActivity)getActivity()).openTrailersFragment(bundle);
                 break;
             }
 
@@ -231,5 +247,58 @@ public class MovieDetailFragment extends Fragment implements View.OnClickListene
         return fragment;
     }
 
+
+    public class TrailersAdapter extends BaseAdapter implements Serializable {
+
+        ArrayList<Trailer> trailers;
+        Context mContext;
+
+        public TrailersAdapter(Context c){
+            trailers = new ArrayList<>();
+            mContext = c;
+        }
+
+        @Override
+        public int getCount() {
+            return trailers.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return trailers.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        public void add(Trailer item){
+            trailers.add(item);
+            super.notifyDataSetChanged();
+        }
+
+        public void clear(){
+            trailers.clear();
+            super.notifyDataSetChanged();
+        }
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            TextView textView;
+            View view;
+            LayoutInflater inflater = LayoutInflater.from(mContext);
+            if(convertView == null){
+                view = inflater.inflate(R.layout.list_item_trailers,parent,false);
+
+            }
+            else{
+                view = convertView;
+            }
+            textView = (TextView) view.findViewById(R.id.list_item_trailers_textView);
+            Trailer trailer = trailers.get(position);
+            textView.setText(trailer.getName());
+            return view;
+        }
+    }
 
 }

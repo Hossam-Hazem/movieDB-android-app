@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 import com.example.android.moviedb.MovieItem;
 import com.example.android.moviedb.R;
-import com.example.android.moviedb.TMDBConnector;
+import com.example.android.moviedb.MoviesListConnector;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -53,12 +53,12 @@ public class MainFragment extends Fragment {
     }
 
     public  void getTopRatedMovies(){
-        TMDBConnector connector = new TMDBConnector(mMoviesAdapter);
+        MoviesListConnector connector = new MoviesListConnector(mMoviesAdapter);
         connector.execute("movie/top_rated");
     }
 
     public void getMostPopularMovies(){
-        TMDBConnector connector = new TMDBConnector(mMoviesAdapter);
+        MoviesListConnector connector = new MoviesListConnector(mMoviesAdapter);
         connector.execute("movie/popular");
     }
 

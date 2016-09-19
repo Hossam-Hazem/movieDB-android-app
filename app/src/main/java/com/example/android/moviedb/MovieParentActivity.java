@@ -1,5 +1,6 @@
 package com.example.android.moviedb;
 
+import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -20,8 +21,8 @@ public abstract class MovieParentActivity extends AppCompatActivity {
         showDialog(MovieReviewsFragment.newInstance());
     }
 
-    public void openTrailersFragment(){
-        showDialog(MovieTrailersFragment.newInstance());
+    public void openTrailersFragment(Bundle bundle){
+        showDialog(MovieTrailersFragment.newInstance(),bundle);
     }
 
     private void showDialog(DialogFragment newFragment) {
@@ -30,6 +31,17 @@ public abstract class MovieParentActivity extends AppCompatActivity {
 
         closeOpenedDialog(ft);
 
+        // Create and show the dialog.
+        newFragment.show(ft, "dialog");
+
+    }
+    private void showDialog(DialogFragment newFragment, Bundle bundle) {
+
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+
+        closeOpenedDialog(ft);
+
+        newFragment.setArguments(bundle);
         // Create and show the dialog.
         newFragment.show(ft, "dialog");
     }

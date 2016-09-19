@@ -44,6 +44,12 @@ public class MovieReviewsFragment extends DialogFragment {
     }
 
 
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        return super.onCreateDialog(savedInstanceState);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -70,18 +76,7 @@ public class MovieReviewsFragment extends DialogFragment {
         mReviewsAdapter.add("ggggggggggggggggggggg");
         mReviewsAdapter.add("ggggggggggggggggggggg");
         mReviewsAdapter.add("ggggggggggggggggggggg");
-        mReviewsAdapter.add("ggggggggggggggggggggg");
-        mReviewsAdapter.add("ggggggggggggggggggggg");
-        mReviewsAdapter.add("ggggggggggggggggggggg");
-        mReviewsAdapter.add("ggggggggggggggggggggg");
-        mReviewsAdapter.add("ggggggggggggggggggggg");
-        mReviewsAdapter.add("ggggggggggggggggggggg");
-        mReviewsAdapter.add("ggggggggggggggggggggg");
-        mReviewsAdapter.add("ggggggggggggggggggggg");
-        mReviewsAdapter.add("ggggggggggggggggggggg");
-        mReviewsAdapter.add("ggggggggggggggggggggg");
-        mReviewsAdapter.add("ggggggggggggggggggggg");
-        mReviewsAdapter.add("ggggggggggggggggggggg");
+
 
 
 
