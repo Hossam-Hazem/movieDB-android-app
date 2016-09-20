@@ -34,12 +34,13 @@ import java.util.List;
 
 public class MovieTrailersFragment extends DialogFragment {
 
-    MovieDetailFragment.TrailersAdapter trailersAdapter;
+    private TrailersAdapter trailersAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
+        trailersAdapter = new TrailersAdapter(getActivity());
     }
 
     public MovieTrailersFragment() {
@@ -54,7 +55,8 @@ public class MovieTrailersFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        trailersAdapter = (MovieDetailFragment.TrailersAdapter) getArguments().getSerializable("trailers");
+        ArrayList<Trailer> trailers = (ArrayList<Trailer>) getArguments().getSerializable("trailers");
+        trailersAdapter.addAll(trailers);
         AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.CustomDialog));
         builder
                 .setTitle("Trailers")
@@ -72,6 +74,9 @@ public class MovieTrailersFragment extends DialogFragment {
                     }
                 });
         AlertDialog dialog =  builder.create();
+        if(trailersAdapter.isEmpty()){
+            dialog.setMessage("No trailers available");
+        }
         ListView listView = dialog.getListView();
         listView.setDivider(new ColorDrawable(Color.TRANSPARENT));
         listView.setDividerHeight(this.getDividerValue(10));
@@ -83,5 +88,61 @@ public class MovieTrailersFragment extends DialogFragment {
         Resources r = getResources();
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }
+    public class TrailersAdapter extends BaseAdapter {
 
+        ArrayList<Trailer> trailers;
+        Context mContext;
+
+        public TrailersAdapter(Context c){
+            trailers = new ArrayList<>();
+            mContext = c;
+        }
+
+        @Override
+        public int getCount() {
+            return trailers.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return trailers.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        public void add(Trailer item){
+            trailers.add(item);
+            super.notifyDataSetChanged();
+        }
+
+        public void addAll(ArrayList<Trailer> trailersList){
+            trailers.addAll(trailersList);
+            super.notifyDataSetChanged();
+        }
+
+        public void clear(){
+            trailers.clear();
+            super.notifyDataSetChanged();
+        }
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            TextView textView;
+            View view;
+            LayoutInflater inflater = LayoutInflater.from(mContext);
+            if(convertView == null){
+                view = inflater.inflate(R.layout.list_item_trailers,parent,false);
+
+            }
+            else{
+                view = convertView;
+            }
+            textView = (TextView) view.findViewById(R.id.list_item_trailers_textView);
+            Trailer trailer = trailers.get(position);
+            textView.setText(trailer.getName());
+            return view;
+        }
+    }
 }

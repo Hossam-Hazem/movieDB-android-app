@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -18,12 +19,12 @@ import layout.MovieTrailersFragment;
  */
 public class MovieContentConnector extends AsyncTask<String,Void,MovieContentConnector.MovieContentPackage> {
     final String BASEURL = "https://api.themoviedb.org/3/";
-    MovieDetailFragment.TrailersAdapter trailersAdapter;
-    MovieDetailFragment.ReviewsAdapter reviewsAdapter;
+    ArrayList<Trailer> trailersAdapter;
+    ArrayList<Review> reviewsAdapter;
     final String API_KEY = MyConfig.MOVIEDB_API_KEY;
     final String API_PARAM = "api_key";
 
-    public MovieContentConnector(MovieDetailFragment.TrailersAdapter trailersAdapter, MovieDetailFragment.ReviewsAdapter reviewsAdapter) {
+    public MovieContentConnector(ArrayList<Trailer> trailersAdapter, ArrayList<Review> reviewsAdapter) {
         this.trailersAdapter = trailersAdapter;
         this.reviewsAdapter = reviewsAdapter;
     }

@@ -1,9 +1,11 @@
 package com.example.android.moviedb;
 
+import java.io.Serializable;
+
 /**
  * Created by pc on 9/19/2016.
  */
-public class Trailer {
+public class Trailer implements Serializable {
     String name;
     String source;
 

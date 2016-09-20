@@ -1,9 +1,11 @@
 package com.example.android.moviedb;
 
+import java.io.Serializable;
+
 /**
  * Created by Hossam on 9/19/2016.
  */
-public class Review {
+public class Review implements Serializable {
     String author;
     String content;
 

@@ -1,6 +1,7 @@
 package layout;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -16,16 +17,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.android.moviedb.R;
+import com.example.android.moviedb.Review;
 
 import java.util.ArrayList;
 
 
 public class MovieReviewsFragment extends DialogFragment {
 
-    private MovieDetailFragment.ReviewsAdapter mReviewsAdapter;
+    private ReviewsAdapter mReviewsAdapter;
 
     public MovieReviewsFragment() {
         // Required empty public constructor
@@ -47,6 +51,7 @@ public class MovieReviewsFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomDialog);
+        mReviewsAdapter = new ReviewsAdapter(getActivity());
 
 
     }
@@ -55,7 +60,8 @@ public class MovieReviewsFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        mReviewsAdapter = (MovieDetailFragment.ReviewsAdapter) getArguments().getSerializable("reviews");
+        ArrayList<Review> reviewsList = (ArrayList<Review>) getArguments().getSerializable("reviews");
+        mReviewsAdapter.addAll(reviewsList);
         AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.CustomDialog));
         builder
                 .setTitle("Reviews")
@@ -66,6 +72,9 @@ public class MovieReviewsFragment extends DialogFragment {
                 })
                 .setAdapter(mReviewsAdapter,null);
         AlertDialog dialog =  builder.create();
+        if(mReviewsAdapter.isEmpty()){
+            dialog.setMessage("No reviews available");
+        }
         ListView listView = dialog.getListView();
         listView.setDivider(new ColorDrawable(Color.TRANSPARENT));
         listView.setDividerHeight(this.getDividerValue(10));
@@ -76,6 +85,66 @@ public class MovieReviewsFragment extends DialogFragment {
         Resources r = getResources();
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }
+    public class ReviewsAdapter extends BaseAdapter {
 
+        ArrayList<Review> reviews;
+        Context mContext;
+
+        public ReviewsAdapter(Context c){
+            reviews = new ArrayList<>();
+            mContext = c;
+        }
+
+        @Override
+        public int getCount() {
+            return reviews.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return reviews.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        public void add(Review item){
+            reviews.add(item);
+            super.notifyDataSetChanged();
+        }
+
+        public void addAll(ArrayList<Review> reviewsList){
+            reviews.addAll(reviewsList);
+            super.notifyDataSetChanged();
+        }
+
+        public void clear(){
+            reviews.clear();
+            super.notifyDataSetChanged();
+        }
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            TextView authorTextView;
+            TextView contentTextView;
+            View view;
+            LayoutInflater inflater = LayoutInflater.from(mContext);
+            if(convertView == null){
+                view = inflater.inflate(R.layout.list_item_reviews,parent,false);
+
+            }
+            else{
+                view = convertView;
+            }
+            authorTextView = (TextView) view.findViewById(R.id.list_item_reviews_author);
+            contentTextView = (TextView) view.findViewById(R.id.list_item_reviews_content);
+            Review review = reviews.get(position);
+            contentTextView.setText(review.getContent());
+            authorTextView.setText(review.getAuthor());
+
+            return view;
+        }
+    }
 
 }

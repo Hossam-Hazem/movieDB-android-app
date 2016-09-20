@@ -47,8 +47,8 @@ public class MovieDetailFragment extends Fragment implements View.OnClickListene
     View fragmentView;
     boolean isFavorite;
     boolean twoPane;
-    TrailersAdapter trailersAdapter;
-    ReviewsAdapter reviewsAdapter;
+    ArrayList<Trailer> trailersList;
+    ArrayList<Review> reviewsList;
 
 
     public MovieDetailFragment() {
@@ -64,8 +64,8 @@ public class MovieDetailFragment extends Fragment implements View.OnClickListene
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        trailersAdapter = new TrailersAdapter(getActivity());
-        reviewsAdapter = new ReviewsAdapter(getActivity());
+        trailersList = new ArrayList<>();
+        reviewsList = new ArrayList<>();
 
     }
 
@@ -90,7 +90,7 @@ public class MovieDetailFragment extends Fragment implements View.OnClickListene
         movieDetails = (MovieItem) getArguments().getSerializable("movieDetails");
         isFavorite = movieDetails.isFavorite(getContext());
 
-        MovieContentConnector connector = new MovieContentConnector(trailersAdapter,reviewsAdapter);
+        MovieContentConnector connector = new MovieContentConnector(trailersList,reviewsList);
         connector.execute(movieDetails.getId()+"");
 
 //        setToolbar();
@@ -122,13 +122,13 @@ public class MovieDetailFragment extends Fragment implements View.OnClickListene
             }
             case R.id.movie_reviews_button:{
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("reviews",reviewsAdapter);
+                bundle.putSerializable("reviews",reviewsList);
                 ((MovieParentActivity)getActivity()).openReviewsFragment(bundle);
                 break;
             }
             case R.id.movie_trailers_button:{
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("trailers",trailersAdapter);
+                bundle.putSerializable("trailers",trailersList);
                 ((MovieParentActivity)getActivity()).openTrailersFragment(bundle);
                 break;
             }
@@ -266,115 +266,9 @@ public class MovieDetailFragment extends Fragment implements View.OnClickListene
     }
 
 
-    public class TrailersAdapter extends BaseAdapter implements Serializable {
-
-        ArrayList<Trailer> trailers;
-        Context mContext;
-
-        public TrailersAdapter(Context c){
-            trailers = new ArrayList<>();
-            mContext = c;
-        }
-
-        @Override
-        public int getCount() {
-            return trailers.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return trailers.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        public void add(Trailer item){
-            trailers.add(item);
-            super.notifyDataSetChanged();
-        }
-
-        public void clear(){
-            trailers.clear();
-            super.notifyDataSetChanged();
-        }
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            TextView textView;
-            View view;
-            LayoutInflater inflater = LayoutInflater.from(mContext);
-            if(convertView == null){
-                view = inflater.inflate(R.layout.list_item_trailers,parent,false);
-
-            }
-            else{
-                view = convertView;
-            }
-            textView = (TextView) view.findViewById(R.id.list_item_trailers_textView);
-            Trailer trailer = trailers.get(position);
-            textView.setText(trailer.getName());
-            return view;
-        }
-    }
 
 
-    public class ReviewsAdapter extends BaseAdapter implements Serializable {
 
-        ArrayList<Review> reviews;
-        Context mContext;
 
-        public ReviewsAdapter(Context c){
-            reviews = new ArrayList<>();
-            mContext = c;
-        }
-
-        @Override
-        public int getCount() {
-            return reviews.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return reviews.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        public void add(Review item){
-            reviews.add(item);
-            super.notifyDataSetChanged();
-        }
-
-        public void clear(){
-            reviews.clear();
-            super.notifyDataSetChanged();
-        }
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            TextView authorTextView;
-            TextView contentTextView;
-            View view;
-            LayoutInflater inflater = LayoutInflater.from(mContext);
-            if(convertView == null){
-                view = inflater.inflate(R.layout.list_item_reviews,parent,false);
-
-            }
-            else{
-                view = convertView;
-            }
-            authorTextView = (TextView) view.findViewById(R.id.list_item_reviews_author);
-            contentTextView = (TextView) view.findViewById(R.id.list_item_reviews_content);
-            Review review = reviews.get(position);
-            contentTextView.setText(review.getContent());
-            authorTextView.setText(review.getAuthor());
-
-            return view;
-        }
-    }
 
 }
