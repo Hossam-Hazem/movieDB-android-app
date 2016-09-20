@@ -21,13 +21,21 @@ import layout.MainFragment;
  */
 
 public class MoviesListConnector extends AsyncTask<String,Void,ArrayList<MovieItem>> {
+    public interface OnFinishCallback{
+        void onFinished(ArrayList<MovieItem> movieItems);
+    }
     final String BASEURL = "https://api.themoviedb.org/3/";
     MainFragment.MovieAdapter adapter;
     Context mContext;
+    OnFinishCallback onFinishCallback;
     public MoviesListConnector(Context mContext, MainFragment.MovieAdapter adapter){
         this.adapter = adapter;
         this.mContext = mContext;
-
+    }
+    public MoviesListConnector(Context mContext, MainFragment.MovieAdapter adapter,OnFinishCallback onFinishCallback){
+        this.adapter = adapter;
+        this.mContext = mContext;
+        this.onFinishCallback = onFinishCallback;
     }
 
     @Override
@@ -45,6 +53,8 @@ public class MoviesListConnector extends AsyncTask<String,Void,ArrayList<MovieIt
         while(i.hasNext()){
             adapter.add(i.next());
         }
+
+        onFinishCallback.onFinished(movieItems);
 
     }
 

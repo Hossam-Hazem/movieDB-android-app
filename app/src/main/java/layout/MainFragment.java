@@ -15,6 +15,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.android.moviedb.MainActivity;
 import com.example.android.moviedb.MovieItem;
 import com.example.android.moviedb.R;
 import com.example.android.moviedb.MoviesListConnector;
@@ -35,7 +36,12 @@ public class MainFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        connector = new MoviesListConnector(getContext(),mMoviesAdapter);
+        connector = new MoviesListConnector(getContext(), mMoviesAdapter, new MoviesListConnector.OnFinishCallback() {
+            @Override
+            public void onFinished(ArrayList<MovieItem> movieItems) {
+                ((MainActivity)getActivity()).onAdapterFinish(movieItems);
+            }
+        });
         getMovies();
     }
 

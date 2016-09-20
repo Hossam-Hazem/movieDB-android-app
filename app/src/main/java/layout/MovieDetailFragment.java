@@ -75,9 +75,7 @@ public class MovieDetailFragment extends Fragment implements View.OnClickListene
         if (!getArguments().containsKey("movieDetails")) {
             return null;
         }
-        else{
-            twoPane = getArguments().getBoolean("twoPane");
-        }
+        twoPane = getArguments().getBoolean("twoPane");
         fragmentView = inflater.inflate(R.layout.fragment_movie_detail, container, false);
         AppCompatActivity currentActivity = (AppCompatActivity) getActivity();
         if (!twoPane) {

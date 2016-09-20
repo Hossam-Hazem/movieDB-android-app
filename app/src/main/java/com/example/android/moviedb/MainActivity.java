@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+
 import layout.MainFragment;
 import layout.MovieDetailFragment;
 
@@ -78,17 +80,24 @@ public class MainActivity extends MovieParentActivity implements MainFragment.Tw
     @Override
     public void listItemClickCallback(MovieItem movieItem) {
         if(mTwoPane){
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.movie_detail_container, MovieDetailFragment.newFragmentWithBundle(movieItem,true))
-                    .addToBackStack(null)
-                    .commit();
+            openMovieDetailTwoPane(movieItem);
         }
         else{
-            Intent intent = new Intent(this, MovieDetailActivity.class);
-            intent.putExtra(MovieDetailActivity.MOVIE_SERIALIZABLE_KEY, movieItem);
-
-            startActivity(intent);
+            openMovieDetailOnePane(movieItem);
         }
+    }
+
+    private void openMovieDetailTwoPane(MovieItem movieItem){
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.movie_detail_container, MovieDetailFragment.newFragmentWithBundle(movieItem,true))
+                .addToBackStack(null)
+                .commit();
+    }
+    private void openMovieDetailOnePane(MovieItem movieItem){
+        Intent intent = new Intent(this, MovieDetailActivity.class);
+        intent.putExtra(MovieDetailActivity.MOVIE_SERIALIZABLE_KEY, movieItem);
+
+        startActivity(intent);
     }
 
     public void removeMovieFromFavorites(MovieItem item){
@@ -98,6 +107,11 @@ public class MainActivity extends MovieParentActivity implements MainFragment.Tw
     public void addMovieToFavorites(MovieItem item){
         MainFragment fragment = (MainFragment) this.getSupportFragmentManager().findFragmentById(R.id.movies_list_fragment);
         fragment.addFavoriteToAdapter(item);
+    }
+    public void onAdapterFinish(ArrayList<MovieItem> movieItems){
+        if(mTwoPane && !movieItems.isEmpty()){
+            openMovieDetailTwoPane(movieItems.get(0));
+        }
     }
 
 }
