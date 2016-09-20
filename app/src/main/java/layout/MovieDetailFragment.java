@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.example.android.moviedb.MainActivity;
 import com.example.android.moviedb.MovieContentConnector;
 import com.example.android.moviedb.MovieItem;
 import com.example.android.moviedb.MovieParentActivity;
@@ -74,9 +75,12 @@ public class MovieDetailFragment extends Fragment implements View.OnClickListene
         if (!getArguments().containsKey("movieDetails")) {
             return null;
         }
+        else{
+            twoPane = getArguments().getBoolean("twoPane");
+        }
         fragmentView = inflater.inflate(R.layout.fragment_movie_detail, container, false);
         AppCompatActivity currentActivity = (AppCompatActivity) getActivity();
-        if (!getArguments().getBoolean("twoPane")) {
+        if (!twoPane) {
             Toolbar toolbar = (Toolbar) fragmentView.findViewById(R.id.toolbar);
             currentActivity.setSupportActionBar(toolbar);
             currentActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -233,6 +237,8 @@ public class MovieDetailFragment extends Fragment implements View.OnClickListene
         boolean isSuccess = movieDetails.setFavorite(getContext());
         if (isSuccess) {
             isFavorite = true;
+            if(twoPane)
+                ((MainActivity)getActivity()).addMovieToFavorites(movieDetails);
             setFavButton(v);
         } else {
             throw new UnsupportedOperationException("error fel insert favorite");
@@ -244,6 +250,8 @@ public class MovieDetailFragment extends Fragment implements View.OnClickListene
 
         if (isSuccess) {
             isFavorite = false;
+            if(twoPane)
+                ((MainActivity)getActivity()).removeMovieFromFavorites(movieDetails);
             setFavButton(v);
         } else {
             throw new UnsupportedOperationException("error fel delete favorite");

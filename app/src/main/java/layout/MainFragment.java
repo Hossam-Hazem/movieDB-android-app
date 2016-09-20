@@ -67,6 +67,13 @@ public class MainFragment extends Fragment {
         connector.execute("favorites");
     }
 
+    public void addFavoriteToAdapter(MovieItem item){
+        mMoviesAdapter.add(item);
+    }
+
+    public void removeFavoriteFromAdapter(MovieItem item){
+        mMoviesAdapter.remove(item);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -135,6 +142,11 @@ public class MainFragment extends Fragment {
         }
         public void clear(){
             moviesList.clear();
+            super.notifyDataSetChanged();
+        }
+
+        public void remove(MovieItem item){
+            moviesList.remove(item);
             super.notifyDataSetChanged();
         }
 

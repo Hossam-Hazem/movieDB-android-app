@@ -1,5 +1,6 @@
 package com.example.android.moviedb;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -88,6 +89,15 @@ public class MainActivity extends MovieParentActivity implements MainFragment.Tw
 
             startActivity(intent);
         }
+    }
+
+    public void removeMovieFromFavorites(MovieItem item){
+        MainFragment fragment = (MainFragment) this.getSupportFragmentManager().findFragmentById(R.id.movies_list_fragment);
+        fragment.removeFavoriteFromAdapter(item);
+    }
+    public void addMovieToFavorites(MovieItem item){
+        MainFragment fragment = (MainFragment) this.getSupportFragmentManager().findFragmentById(R.id.movies_list_fragment);
+        fragment.addFavoriteToAdapter(item);
     }
 
 }
