@@ -26,9 +26,10 @@ import java.util.ArrayList;
 
 public class MainFragment extends Fragment {
 
-    public interface OnFinishAdapterEmpty{
+    public interface OnFinishAdapterEmpty {
         public void onFinished();
     }
+
     private MovieAdapter mMoviesAdapter;
     private MoviesListConnector connector;
     private OnFinishAdapterEmpty onFinishAdapterEmpty;
@@ -43,10 +44,9 @@ public class MainFragment extends Fragment {
         connector = new MoviesListConnector(getContext(), mMoviesAdapter, new MoviesListConnector.OnFinishCallback() {
             @Override
             public void onFinished(ArrayList<MovieItem> movieItems) {
-                if(movieItems.isEmpty()&&onFinishAdapterEmpty!=null) {
+                if (movieItems.isEmpty() && onFinishAdapterEmpty != null) {
                     onFinishAdapterEmpty.onFinished();
-                }
-                else{
+                } else {
                     ((MainActivity) getActivity()).onAdapterFinish(movieItems);
                 }
 
@@ -55,10 +55,10 @@ public class MainFragment extends Fragment {
         getMovies();
     }
 
-    public void getMovies(){
+    public void getMovies() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        int key = Integer.parseInt(prefs.getString(getString(R.string.pref_sort_list_key),"0"));
-        switch (key){
+        int key = Integer.parseInt(prefs.getString(getString(R.string.pref_sort_list_key), "0"));
+        switch (key) {
             case 0:
                 getMostPopularMovies();
                 break;
@@ -71,36 +71,36 @@ public class MainFragment extends Fragment {
 
     }
 
-    public  void getTopRatedMovies(){
+    public void getTopRatedMovies() {
         connector.execute("movie/top_rated");
         initOnFinishAdapterEmpty("No movies returned from API");
     }
 
-    public void getMostPopularMovies(){
+    public void getMostPopularMovies() {
         connector.execute("movie/popular");
         initOnFinishAdapterEmpty("No movies returned from API");
     }
 
-    public void getFavoriteMovies(){
+    public void getFavoriteMovies() {
         connector.execute("favorites");
         initOnFinishAdapterEmpty("You have no favorites");
     }
 
-    public void initOnFinishAdapterEmpty(final String message){
+    public void initOnFinishAdapterEmpty(final String message) {
         onFinishAdapterEmpty = new OnFinishAdapterEmpty() {
             @Override
             public void onFinished() {
-                Toast.makeText(getContext(),message,Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
                 onFinishAdapterEmpty = null;
             }
         };
     }
 
-    public void addFavoriteToAdapter(MovieItem item){
+    public void addFavoriteToAdapter(MovieItem item) {
         mMoviesAdapter.add(item);
     }
 
-    public void removeFavoriteFromAdapter(MovieItem item){
+    public void removeFavoriteFromAdapter(MovieItem item) {
         mMoviesAdapter.remove(item);
     }
 
@@ -120,20 +120,11 @@ public class MainFragment extends Fragment {
 
         GridView gridView = (GridView) fragmentView.findViewById(R.id.gird_item_movie);
         gridView.setAdapter(mMoviesAdapter);
-        gridView.setOnItemClickListener( new AdapterView.OnItemClickListener(){
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-//                String forecast = mForecastAdapter.getItem(position);
-//                // Toast.makeText(getActivity(),forecast,Toast.LENGTH_SHORT).show();
-//                Intent intent = new Intent(getActivity(),DetailActivity.class)
-//                        .putExtra(Intent.EXTRA_TEXT,forecast);
-//                startActivity(intent);
                 MovieItem item = (MovieItem) mMoviesAdapter.getItem(position);
-                Toast.makeText(getActivity(),item.getId()+"",Toast.LENGTH_SHORT).show();
-
                 ((TwoPaneInterface) getActivity()).listItemClickCallback(item);
-
-
 
 
             }
@@ -142,7 +133,7 @@ public class MainFragment extends Fragment {
         return fragmentView;
     }
 
-    public interface TwoPaneInterface{
+    public interface TwoPaneInterface {
         void listItemClickCallback(MovieItem movieItem);
     }
 
@@ -150,31 +141,33 @@ public class MainFragment extends Fragment {
         private Context mContext;
         private ArrayList<MovieItem> moviesList;
 
-        public MovieAdapter(Context c)
-        {
+        public MovieAdapter(Context c) {
             mContext = c;
             moviesList = new ArrayList<>();
 
         }
+
         public MovieAdapter(Context c, ArrayList<MovieItem> movies) {
             mContext = c;
             moviesList = movies;
 
         }
+
         public int getCount() {
             return moviesList.size();
         }
 
-        public void add(MovieItem item){
+        public void add(MovieItem item) {
             moviesList.add(item);
             super.notifyDataSetChanged();
         }
-        public void clear(){
+
+        public void clear() {
             moviesList.clear();
             super.notifyDataSetChanged();
         }
 
-        public void remove(MovieItem item){
+        public void remove(MovieItem item) {
             moviesList.remove(item);
             super.notifyDataSetChanged();
         }
@@ -191,11 +184,10 @@ public class MainFragment extends Fragment {
             ImageView imageView;
             View view;
             LayoutInflater inflater = LayoutInflater.from(mContext);
-            if(convertView == null){
-                view = inflater.inflate(R.layout.grid_item_movies,parent,false);
+            if (convertView == null) {
+                view = inflater.inflate(R.layout.grid_item_movies, parent, false);
 
-            }
-            else{
+            } else {
                 view = convertView;
             }
             imageView = (ImageView) view.findViewById(R.id.grid_item_movie_imageView);

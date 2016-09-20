@@ -21,7 +21,7 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat" />
 
-
+    <style name="SettingsTheme" parent="AppTheme"/>
 
     <style name="CustomDialog" parent="Theme.AppCompat.Dialog">
         <item name="android:background">#000</item>

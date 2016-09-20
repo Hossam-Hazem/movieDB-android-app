@@ -12,4 +12,7 @@
         <item name="android:windowNoTitle">false</item>
     </style>
 
+    <style name="SettingsTheme" parent="@android:style/ThemeOverlay.Material.Dark.ActionBar">
+    </style>
+
 </resources>
