@@ -5,23 +5,25 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp">
+    android:padding="10dp"
+    android:background="#24000000">
 
 
     <ImageView
-        android:layout_width="75dp"
-        android:layout_height="75dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:id="@+id/imageView"
         android:src="@drawable/ic_play"
         android:layout_margin="10dp"
-        android:layout_gravity="center_vertical" />
+        android:layout_gravity="center" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Large Text"
         android:id="@+id/list_item_trailers_textView"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:gravity="center_horizontal" />
 
 </LinearLayout>
