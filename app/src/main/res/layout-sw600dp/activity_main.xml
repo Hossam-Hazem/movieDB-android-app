@@ -6,7 +6,7 @@
     android:baselineAligned="false"
     android:divider="?android:attr/dividerHorizontal"
     android:orientation="horizontal"
-    tools:context="com.example.android.moviedb.MainActivity">
+    tools:mContext="com.example.android.moviedb.MainActivity">
     <fragment
         android:id="@+id/movies_list_fragment"
         android:name="layout.MainFragment"

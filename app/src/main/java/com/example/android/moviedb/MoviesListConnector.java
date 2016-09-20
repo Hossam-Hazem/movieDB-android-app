@@ -1,8 +1,11 @@
 package com.example.android.moviedb;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.annotation.Nullable;
+
+import com.example.android.moviedb.data.MovieContract;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,8 +23,11 @@ import layout.MainFragment;
 public class MoviesListConnector extends AsyncTask<String,Void,ArrayList<MovieItem>> {
     final String BASEURL = "https://api.themoviedb.org/3/";
     MainFragment.MovieAdapter adapter;
-    public MoviesListConnector(MainFragment.MovieAdapter adapter){
+    Context mContext;
+    public MoviesListConnector(Context mContext, MainFragment.MovieAdapter adapter){
         this.adapter = adapter;
+        this.mContext = mContext;
+
     }
 
     @Override
@@ -74,6 +80,20 @@ public class MoviesListConnector extends AsyncTask<String,Void,ArrayList<MovieIt
 
 
     public ArrayList<MovieItem> getMoviesList(String ACTION){
+        if(ACTION.equals("favorites")){
+            return getMoviesListFromDB(ACTION);
+        }
+        else{
+            return getMoviesListFromWeb(ACTION);
+        }
+
+    }
+
+    private ArrayList<MovieItem> getMoviesListFromDB(String ACTION) {
+        return MovieContract.FavoriteEntry.getFavorites(mContext);
+    }
+
+    private ArrayList<MovieItem> getMoviesListFromWeb(String ACTION){
         final String API_KEY = MyConfig.MOVIEDB_API_KEY;
         final String API_PARAM = "api_key";
         Uri uri =  Uri.parse(BASEURL+ACTION).buildUpon()

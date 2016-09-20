@@ -10,6 +10,10 @@ import android.provider.BaseColumns;
 
 import com.example.android.moviedb.MovieItem;
 
+import java.util.ArrayList;
+
+import layout.MainFragment;
+
 /**
  * Created by pc on 9/4/2016.
  */
@@ -61,48 +65,75 @@ public class MovieContract {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
-        public static boolean insert(Context context, MovieItem movieItem){
+        public static boolean insert(Context context, MovieItem movieItem) {
 
             ContentValues movieValues = new ContentValues();
-            movieValues.put(COLUMN_FAVORITE_ID,movieItem.getId());
-            movieValues.put(COLUMN_FAVORITE_TITLE,movieItem.getName());
-            movieValues.put(COLUMN_FAVORITE_SYNOPSIS,movieItem.getDescription());
-            movieValues.put(COLUMN_FAVORITE_RATING,movieItem.getRating()+"");
-            movieValues.put(COLUMN_FAVORITE_IMAGE_PATH,movieItem.getImagePath());
-            movieValues.put(COLUMN_FAVORITE_RELEASE_DATE,movieItem.getDate());
+            movieValues.put(COLUMN_FAVORITE_ID, movieItem.getId());
+            movieValues.put(COLUMN_FAVORITE_TITLE, movieItem.getName());
+            movieValues.put(COLUMN_FAVORITE_SYNOPSIS, movieItem.getDescription());
+            movieValues.put(COLUMN_FAVORITE_RATING, movieItem.getRating() + "");
+            movieValues.put(COLUMN_FAVORITE_IMAGE_PATH, movieItem.getImagePath());
+            movieValues.put(COLUMN_FAVORITE_RELEASE_DATE, movieItem.getDate());
             Uri insertedUri = context.getContentResolver().insert(
                     CONTENT_URI,
                     movieValues
             );
 
             long movieId = ContentUris.parseId(insertedUri);
-            if(movieId>-1)
+            if (movieId > -1)
                 return true;
             return false;
         }
 
-        public static boolean checkMovieExistsByName(Context context,long id){
-            Uri uri= CONTENT_URI.buildUpon().appendPath(id+"").build();
+        public static boolean checkMovieExistsByName(Context context, long id) {
+            Uri uri = CONTENT_URI.buildUpon().appendPath(id + "").build();
             Cursor result = context.getContentResolver().query(
                     uri,
                     new String[]{_ID},
                     COLUMN_FAVORITE_ID + " = ?",
-                    new String[]{id+""},
+                    new String[]{id + ""},
                     null
             );
             if (result != null && result.moveToFirst()) {
-                    return true;
+                return true;
             }
             result.close();
             return false;
         }
 
         public static boolean delete(Context context, long id) {
-            int res =  context.getContentResolver().delete(
+            int res = context.getContentResolver().delete(
                     CONTENT_URI,
-                    FavoriteEntry.COLUMN_FAVORITE_ID+"=?",
-                    new String[]{id+""});
-            return res>0;
+                    FavoriteEntry.COLUMN_FAVORITE_ID + "=?",
+                    new String[]{id + ""});
+            return res > 0;
+        }
+
+        public static ArrayList<MovieItem> getFavorites(Context context) {
+            Cursor cursor = context.getContentResolver().query(
+                    CONTENT_URI,
+                    null,
+                    null,
+                    null,
+                    null
+            );
+            ArrayList<MovieItem> result = new ArrayList<>();
+            while (cursor.moveToNext()) {
+
+                MovieItem movie = new MovieItem(
+                        cursor.getLong(cursor.getColumnIndex(COLUMN_FAVORITE_ID)),
+                        cursor.getString(cursor.getColumnIndex(COLUMN_FAVORITE_TITLE)),
+                        cursor.getString(cursor.getColumnIndex(COLUMN_FAVORITE_RELEASE_DATE)),
+                        cursor.getFloat(cursor.getColumnIndex(COLUMN_FAVORITE_RATING)),
+                        cursor.getString(cursor.getColumnIndex(COLUMN_FAVORITE_SYNOPSIS)),
+                        cursor.getString(cursor.getColumnIndex(COLUMN_FAVORITE_IMAGE_PATH))
+                );
+
+                result.add(movie);
+
+            }
+
+            return result;
         }
     }
 }

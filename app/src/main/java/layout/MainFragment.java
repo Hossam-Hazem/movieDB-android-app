@@ -26,6 +26,7 @@ import java.util.ArrayList;
 public class MainFragment extends Fragment {
 
     private MovieAdapter mMoviesAdapter;
+    private MoviesListConnector connector;
 
     public MainFragment() {
         // Required empty public constructor
@@ -34,8 +35,8 @@ public class MainFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        connector = new MoviesListConnector(getContext(),mMoviesAdapter);
         getMovies();
-
     }
 
     public void getMovies(){
@@ -48,22 +49,22 @@ public class MainFragment extends Fragment {
             case 1:
                 getTopRatedMovies();
                 break;
+            case 2:
+                getFavoriteMovies();
         }
 
     }
 
     public  void getTopRatedMovies(){
-        MoviesListConnector connector = new MoviesListConnector(mMoviesAdapter);
         connector.execute("movie/top_rated");
     }
 
     public void getMostPopularMovies(){
-        MoviesListConnector connector = new MoviesListConnector(mMoviesAdapter);
         connector.execute("movie/popular");
     }
 
     public void getFavoriteMovies(){
-
+        connector.execute("favorites");
     }
 
 
