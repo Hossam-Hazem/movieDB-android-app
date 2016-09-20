@@ -26,8 +26,12 @@ import java.util.ArrayList;
 
 public class MainFragment extends Fragment {
 
+    public interface OnFinishAdapterEmpty{
+        public void onFinished();
+    }
     private MovieAdapter mMoviesAdapter;
     private MoviesListConnector connector;
+    private OnFinishAdapterEmpty onFinishAdapterEmpty;
 
     public MainFragment() {
         // Required empty public constructor
@@ -39,7 +43,13 @@ public class MainFragment extends Fragment {
         connector = new MoviesListConnector(getContext(), mMoviesAdapter, new MoviesListConnector.OnFinishCallback() {
             @Override
             public void onFinished(ArrayList<MovieItem> movieItems) {
-                ((MainActivity)getActivity()).onAdapterFinish(movieItems);
+                if(movieItems.isEmpty()&&onFinishAdapterEmpty!=null) {
+                    onFinishAdapterEmpty.onFinished();
+                }
+                else{
+                    ((MainActivity) getActivity()).onAdapterFinish(movieItems);
+                }
+
             }
         });
         getMovies();
@@ -63,14 +73,27 @@ public class MainFragment extends Fragment {
 
     public  void getTopRatedMovies(){
         connector.execute("movie/top_rated");
+        initOnFinishAdapterEmpty("No movies returned from API");
     }
 
     public void getMostPopularMovies(){
         connector.execute("movie/popular");
+        initOnFinishAdapterEmpty("No movies returned from API");
     }
 
     public void getFavoriteMovies(){
         connector.execute("favorites");
+        initOnFinishAdapterEmpty("You have no favorites");
+    }
+
+    public void initOnFinishAdapterEmpty(final String message){
+        onFinishAdapterEmpty = new OnFinishAdapterEmpty() {
+            @Override
+            public void onFinished() {
+                Toast.makeText(getContext(),message,Toast.LENGTH_LONG).show();
+                onFinishAdapterEmpty = null;
+            }
+        };
     }
 
     public void addFavoriteToAdapter(MovieItem item){
