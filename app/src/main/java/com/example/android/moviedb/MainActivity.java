@@ -28,7 +28,6 @@ public class MainActivity extends MovieParentActivity implements MainFragment.Tw
         if(findViewById(R.id.movie_detail_container)!=null){
             mTwoPane = true;
             if(savedInstanceState == null){
-               // MovieItem movieItem = new MovieItem("fake","fake",1,"fake","esN3gWb1P091xExLddD2nh4zmi3.jpg");
                 MovieDetailFragment movieDetailFragment = new MovieDetailFragment();
                 Bundle bundle = new Bundle();
                // bundle.putSerializable("movieDetails",movieItem);
@@ -37,7 +36,6 @@ public class MainActivity extends MovieParentActivity implements MainFragment.Tw
                 getSupportFragmentManager().beginTransaction()
                         .add(R.id.movie_detail_container,movieDetailFragment)
                         .commit();
-                //TODO fix and add the movie details
             }
 
         }
@@ -81,6 +79,7 @@ public class MainActivity extends MovieParentActivity implements MainFragment.Tw
         if(mTwoPane){
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.movie_detail_container, MovieDetailFragment.newFragmentWithBundle(movieItem,true))
+                    .addToBackStack(null)
                     .commit();
         }
         else{

@@ -1,5 +1,6 @@
 package layout;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -74,12 +75,16 @@ public class MovieDetailFragment extends Fragment implements View.OnClickListene
             return null;
         }
         fragmentView = inflater.inflate(R.layout.fragment_movie_detail, container, false);
-        final Toolbar toolbar = (Toolbar) fragmentView.findViewById(R.id.toolbar);
         AppCompatActivity currentActivity = (AppCompatActivity) getActivity();
         if (!getArguments().getBoolean("twoPane")) {
+            Toolbar toolbar = (Toolbar) fragmentView.findViewById(R.id.toolbar);
             currentActivity.setSupportActionBar(toolbar);
+            currentActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                fragmentView.findViewById(R.id.movie_detail_container).setFitsSystemWindows(true);
+            }
         }
-        currentActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         movieDetails = (MovieItem) getArguments().getSerializable("movieDetails");
         isFavorite = movieDetails.isFavorite(getContext());
 
