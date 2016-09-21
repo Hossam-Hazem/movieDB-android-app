@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageView;
 
 import com.example.android.moviedb.R;
@@ -32,7 +33,9 @@ public class MovieImageFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return super.onCreateDialog(savedInstanceState);
+        Dialog d =  super.onCreateDialog(savedInstanceState);
+        d.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        return d;
     }
 
     @Override
