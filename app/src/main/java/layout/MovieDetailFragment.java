@@ -103,6 +103,7 @@ public class MovieDetailFragment extends Fragment implements View.OnClickListene
         ((FloatingActionButton) fragmentView.findViewById(R.id.favorite_button)).setOnClickListener(this);
         ((Button) fragmentView.findViewById(R.id.movie_trailers_button)).setOnClickListener(this);
         ((Button) fragmentView.findViewById(R.id.movie_reviews_button)).setOnClickListener(this);
+        ((ImageView) fragmentView.findViewById(R.id.backdrop)).setOnClickListener(this);
 
         setFavButton(fragmentView);
 
@@ -130,6 +131,12 @@ public class MovieDetailFragment extends Fragment implements View.OnClickListene
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("trailers",trailersList);
                 ((MovieParentActivity)getActivity()).openTrailersFragment(bundle);
+                break;
+            }
+            case R.id.backdrop:{
+                Bundle bundle = new Bundle();
+                bundle.putString("uri",movieDetails.getImageBackDropURL());
+                ((MovieParentActivity)getActivity()).openImageFragment(bundle);
                 break;
             }
 
@@ -171,7 +178,7 @@ public class MovieDetailFragment extends Fragment implements View.OnClickListene
 
     private void loadBackdrop() {
         final ImageView imageView = (ImageView) fragmentView.findViewById(R.id.backdrop);
-        Picasso.with(getActivity()).load(movieDetails.getImageURL()).into(imageView);
+        Picasso.with(getActivity()).load(movieDetails.getImageBackDropURL()).into(imageView);
     }
 
     private void setMovieTitle() {

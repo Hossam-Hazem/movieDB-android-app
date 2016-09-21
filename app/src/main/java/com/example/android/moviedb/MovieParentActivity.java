@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import layout.MovieImageFragment;
 import layout.MovieReviewsFragment;
 import layout.MovieTrailersFragment;
 
@@ -23,6 +24,10 @@ public abstract class MovieParentActivity extends AppCompatActivity {
 
     public void openTrailersFragment(Bundle bundle){
         showDialog(MovieTrailersFragment.newInstance(),bundle);
+    }
+
+    public void openImageFragment(Bundle bundle){
+        showDialog(MovieImageFragment.newInstance(),bundle);
     }
 
     private void showDialog(DialogFragment newFragment) {

@@ -18,6 +18,7 @@ public class MovieItem implements Serializable {
     private String description;
     private String imagePath;
     private String baseURI;
+    private String backDropURI;
 
     public MovieItem(long id, String name, String date, float rating, String description, String imagePath) {
         this.id = id;
@@ -27,6 +28,7 @@ public class MovieItem implements Serializable {
         this.description = description;
         this.imagePath = imagePath;
         this.baseURI = "https://image.tmdb.org/t/p/w300";
+        this.backDropURI = "https://image.tmdb.org/t/p/w780";
     }
 
     public long getId() {
@@ -52,12 +54,12 @@ public class MovieItem implements Serializable {
         return imagePath;
     }
 
-    public String getBaseURI() {
-        return baseURI;
-    }
-
     public String getImageURL(){
         return baseURI+imagePath;
+    }
+
+    public String getImageBackDropURL(){
+        return backDropURI+imagePath;
     }
 
     public boolean isFavorite(Context context){
