@@ -65,7 +65,7 @@ public class MyConnection {
                 try {
                     reader.close();
                 } catch (final IOException e) {
-                    Log.e(LOG_TAG, "Error closing stream", e);
+                    e.printStackTrace();
                 }
             }
         }
@@ -75,7 +75,6 @@ public class MyConnection {
             return null;
         }
         resultJSONString = buffer.toString();
-        Log.v(LOG_TAG,"Forecast JSON String: "+ resultJSONString);
 
         if (urlConnection != null) {
             urlConnection.disconnect();
