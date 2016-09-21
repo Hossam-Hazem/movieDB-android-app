@@ -78,6 +78,7 @@
     <string name="pref_title_choose_sort">Movies Sorting Criteria</string>
     <string name="pref_sort_list_key">sort_list</string>
     <string name="movie_image_description">Background image of the movie</string>
+    <string name="action_share">Share</string>
     <string name="opening_quote">“</string>
     <string name="closing_quote">”</string>
 </resources>

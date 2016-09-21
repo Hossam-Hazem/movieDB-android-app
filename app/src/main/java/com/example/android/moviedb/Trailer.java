@@ -21,4 +21,8 @@ public class Trailer implements Serializable {
     public String getSource() {
         return source;
     }
+
+    public String getURL(){
+        return "http://www.youtube.com/watch?v="+source;
+    }
 }

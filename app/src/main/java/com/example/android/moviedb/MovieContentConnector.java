@@ -18,15 +18,26 @@ import layout.MovieTrailersFragment;
  * Created by pc on 9/19/2016.
  */
 public class MovieContentConnector extends AsyncTask<String,Void,MovieContentConnector.MovieContentPackage> {
+    public interface CallbackInterface{
+        public void getFirstTrailer(Trailer trailer);
+    }
+
     final String BASEURL = "https://api.themoviedb.org/3/";
     ArrayList<Trailer> trailersAdapter;
     ArrayList<Review> reviewsAdapter;
     final String API_KEY = MyConfig.MOVIEDB_API_KEY;
     final String API_PARAM = "api_key";
+    CallbackInterface callbackInterface;
 
     public MovieContentConnector(ArrayList<Trailer> trailersAdapter, ArrayList<Review> reviewsAdapter) {
         this.trailersAdapter = trailersAdapter;
         this.reviewsAdapter = reviewsAdapter;
+    }
+
+    public MovieContentConnector(ArrayList<Trailer> trailersAdapter, ArrayList<Review> reviewsAdapter,CallbackInterface callbackInterface) {
+        this.trailersAdapter = trailersAdapter;
+        this.reviewsAdapter = reviewsAdapter;
+        this.callbackInterface = callbackInterface;
     }
 
     public ArrayList<Trailer> getMovieTrailers(String id){
@@ -102,6 +113,13 @@ public class MovieContentConnector extends AsyncTask<String,Void,MovieContentCon
 
         addTrailersToAdapter(movieContentPackage.trailers);
         addReviewsToAdapter(movieContentPackage.reviews);
+
+        if(callbackInterface!=null){
+            if(!trailersAdapter.isEmpty())
+                callbackInterface.getFirstTrailer(movieContentPackage.trailers.get(0));
+            else
+                callbackInterface.getFirstTrailer(null);
+        }
     }
 
     private void addTrailersToAdapter(ArrayList<Trailer> trailers){

@@ -93,6 +93,12 @@ public class MainActivity extends MovieParentActivity implements MainFragment.Tw
                 .addToBackStack(null)
                 .commit();
     }
+
+    private void OpenMovieDetailTwoPaneInit(MovieItem movieItem){
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.movie_detail_container, MovieDetailFragment.newFragmentWithBundle(movieItem,true))
+                .commit();
+    }
     private void openMovieDetailOnePane(MovieItem movieItem){
         Intent intent = new Intent(this, MovieDetailActivity.class);
         intent.putExtra(MovieDetailActivity.MOVIE_SERIALIZABLE_KEY, movieItem);
@@ -110,7 +116,7 @@ public class MainActivity extends MovieParentActivity implements MainFragment.Tw
     }
     public void onAdapterFinish(ArrayList<MovieItem> movieItems){
         if(mTwoPane && !movieItems.isEmpty()){
-            openMovieDetailTwoPane(movieItems.get(0));
+            OpenMovieDetailTwoPaneInit(movieItems.get(0));
         }
     }
 

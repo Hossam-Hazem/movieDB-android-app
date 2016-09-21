@@ -69,7 +69,7 @@ public class MovieTrailersFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Trailer trailer = (Trailer) trailersAdapter.getItem(which);
-                        Uri  uri = Uri.parse("http://www.youtube.com/watch?v="+trailer.getSource());
+                        Uri  uri = Uri.parse(trailer.getURL());
                         startActivity(new Intent(Intent.ACTION_VIEW,uri));
                     }
                 });

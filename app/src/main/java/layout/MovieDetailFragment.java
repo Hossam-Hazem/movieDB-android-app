@@ -10,9 +10,15 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -20,6 +26,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.moviedb.MainActivity;
 import com.example.android.moviedb.MovieContentConnector;
@@ -49,9 +56,11 @@ public class MovieDetailFragment extends Fragment implements View.OnClickListene
     boolean twoPane;
     ArrayList<Trailer> trailersList;
     ArrayList<Review> reviewsList;
+    ShareActionProvider mShareActionProvider;
 
 
     public MovieDetailFragment() {
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -90,11 +99,19 @@ public class MovieDetailFragment extends Fragment implements View.OnClickListene
         movieDetails = (MovieItem) getArguments().getSerializable("movieDetails");
         isFavorite = movieDetails.isFavorite(getContext());
 
-        MovieContentConnector connector = new MovieContentConnector(trailersList,reviewsList);
-        connector.execute(movieDetails.getId()+"");
+        MovieContentConnector connector = new MovieContentConnector(trailersList, reviewsList, new MovieContentConnector.CallbackInterface() {
+            @Override
+            public void getFirstTrailer(Trailer trailer) {
+                if(trailer == null){
+                    Toast.makeText(getContext(),"No Trailers Found!",Toast.LENGTH_LONG).show();
+                }
+                else
+                    setShareProviderIntent(trailer);
+            }
+        });
+        connector.execute(movieDetails.getId() + "");
 
 //        setToolbar();
-
 
 
         linkMovieDetailsUI();
@@ -110,10 +127,34 @@ public class MovieDetailFragment extends Fragment implements View.OnClickListene
         return fragmentView;
     }
 
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.detailfragment, menu);
+
+        MenuItem menuItem = menu.findItem(R.id.action_share);
+
+        mShareActionProvider =
+                (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+
+    }
+
+    public void setShareProviderIntent(Trailer trailer) {
+        if (mShareActionProvider != null) {
+            mShareActionProvider.setShareIntent(
+                    ((MovieParentActivity) getActivity())
+                            .createShareMovieIntent(
+                                    movieDetails.getName(), trailer.getURL()));
+
+        } else {
+            Log.d(MovieDetailFragment.class.getSimpleName(), "Share Action Provider is null?");
+        }
+    }
+
     @Override
     public void onClick(View v) {
-        switch(v.getId()){
-            case R.id.favorite_button:{
+        switch (v.getId()) {
+            case R.id.favorite_button: {
                 if (isFavorite) {
                     removeMovieFavorite(v);
                 } else {
@@ -121,22 +162,22 @@ public class MovieDetailFragment extends Fragment implements View.OnClickListene
                 }
                 break;
             }
-            case R.id.movie_reviews_button:{
+            case R.id.movie_reviews_button: {
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("reviews",reviewsList);
-                ((MovieParentActivity)getActivity()).openReviewsFragment(bundle);
+                bundle.putSerializable("reviews", reviewsList);
+                ((MovieParentActivity) getActivity()).openReviewsFragment(bundle);
                 break;
             }
-            case R.id.movie_trailers_button:{
+            case R.id.movie_trailers_button: {
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("trailers",trailersList);
-                ((MovieParentActivity)getActivity()).openTrailersFragment(bundle);
+                bundle.putSerializable("trailers", trailersList);
+                ((MovieParentActivity) getActivity()).openTrailersFragment(bundle);
                 break;
             }
-            case R.id.backdrop:{
+            case R.id.backdrop: {
                 Bundle bundle = new Bundle();
-                bundle.putString("uri",movieDetails.getImageBackDropURL());
-                ((MovieParentActivity)getActivity()).openImageFragment(bundle);
+                bundle.putString("uri", movieDetails.getImageBackDropURL());
+                ((MovieParentActivity) getActivity()).openImageFragment(bundle);
                 break;
             }
 
@@ -242,8 +283,8 @@ public class MovieDetailFragment extends Fragment implements View.OnClickListene
         boolean isSuccess = movieDetails.setFavorite(getContext());
         if (isSuccess) {
             isFavorite = true;
-            if(twoPane)
-                ((MainActivity)getActivity()).addMovieToFavorites(movieDetails);
+            if (twoPane)
+                ((MainActivity) getActivity()).addMovieToFavorites(movieDetails);
             setFavButton(v);
         } else {
             throw new UnsupportedOperationException("error fel insert favorite");
@@ -255,27 +296,22 @@ public class MovieDetailFragment extends Fragment implements View.OnClickListene
 
         if (isSuccess) {
             isFavorite = false;
-            if(twoPane)
-                ((MainActivity)getActivity()).removeMovieFromFavorites(movieDetails);
+            if (twoPane)
+                ((MainActivity) getActivity()).removeMovieFromFavorites(movieDetails);
             setFavButton(v);
         } else {
             throw new UnsupportedOperationException("error fel delete favorite");
         }
     }
 
-    public static MovieDetailFragment newFragmentWithBundle(MovieItem movieItem,boolean twoPane){
+    public static MovieDetailFragment newFragmentWithBundle(MovieItem movieItem, boolean twoPane) {
         MovieDetailFragment fragment = new MovieDetailFragment();
         Bundle bundle = new Bundle();
-        bundle.putBoolean("twoPane",twoPane);
-        bundle.putSerializable(MOVIE_SERIALIZABLE_KEY,movieItem);
+        bundle.putBoolean("twoPane", twoPane);
+        bundle.putSerializable(MOVIE_SERIALIZABLE_KEY, movieItem);
         fragment.setArguments(bundle);
         return fragment;
     }
-
-
-
-
-
 
 
 }
