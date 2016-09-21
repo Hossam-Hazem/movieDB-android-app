@@ -42,13 +42,15 @@ public class MovieContentConnector extends AsyncTask<String,Void,MovieContentCon
         JSONArray trailersJSON;
         ArrayList<Trailer> trailers = new ArrayList<>();
         try {
-            trailersJSON  = (new JSONObject(JSONStr)).getJSONArray("youtube");
-            for(int c =0;c<trailersJSON.length();c++){
-                JSONObject o = trailersJSON.getJSONObject(c);
-                String name = o.getString("name");
-                String source = o.getString("source");
-                Trailer t = new Trailer(name,source);
-                trailers.add(t);
+            if(JSONStr != null) {
+                trailersJSON = (new JSONObject(JSONStr)).getJSONArray("youtube");
+                for (int c = 0; c < trailersJSON.length(); c++) {
+                    JSONObject o = trailersJSON.getJSONObject(c);
+                    String name = o.getString("name");
+                    String source = o.getString("source");
+                    Trailer t = new Trailer(name, source);
+                    trailers.add(t);
+                }
             }
 
         } catch (JSONException e) {
@@ -70,13 +72,15 @@ public class MovieContentConnector extends AsyncTask<String,Void,MovieContentCon
         JSONArray reviewsJSON;
         ArrayList<Review> reviews = new ArrayList<>();
         try {
-            reviewsJSON  = (new JSONObject(JSONStr)).getJSONArray("results");
-            for(int c =0;c<reviewsJSON.length();c++){
-                JSONObject o = reviewsJSON.getJSONObject(c);
-                String author = o.getString("author");
-                String content = o.getString("content");
-                Review t = new Review(author,content);
-                reviews.add(t);
+            if(JSONStr != null) {
+                reviewsJSON = (new JSONObject(JSONStr)).getJSONArray("results");
+                for (int c = 0; c < reviewsJSON.length(); c++) {
+                    JSONObject o = reviewsJSON.getJSONObject(c);
+                    String author = o.getString("author");
+                    String content = o.getString("content");
+                    Review t = new Review(author, content);
+                    reviews.add(t);
+                }
             }
 
         } catch (JSONException e) {
